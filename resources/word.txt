@@ -1,8 +1,0 @@
-grantor,授权人
-privilege,权限
-indicate,表明
-preserve,保存
-word,单词
-word,单词
-grantee,你好
-hello,你好
