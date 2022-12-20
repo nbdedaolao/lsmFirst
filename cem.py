@@ -1,10 +1,8 @@
 from flask import Flask, render_template, request
 import sys
-import config
 import re
 
 cem = Flask(__name__)
-cem.config.from_object(config)
 
 
 @cem.route('/')
@@ -12,7 +10,7 @@ def home():
     word = []
     interpretation = []
     wDic = {}
-    with open(sys.argv[1], 'r+', encoding='utf_8') as f:
+    with open(sys.argv[1], 'r', encoding='utf_8') as f:
         txtList = f.readlines()
         word = map(lambda s: s.split(',')[0], txtList)
         interpretation = map(lambda s: s.split(',')[1], txtList)

@@ -1,0 +1,1 @@
+start E:/python3.8/python.exe e:/vscode/code/cem/cem.py C:\Users\GW00310323\Desktop\word.txt
