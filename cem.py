@@ -20,6 +20,8 @@ def readOrWriteFile(mode, *inputString):
         return txtList
     elif (mode == 'a'):
         try:
+            f = open(sys.argv[1], 'r', encoding='utf_8')
+            f.close()
             f = open(sys.argv[1], mode, encoding='utf_8')
             f.write('\n'+inputString[0])
             f.close()
