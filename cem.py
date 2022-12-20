@@ -5,39 +5,46 @@ import re
 cem = Flask(__name__)
 
 
+def readOrWriteFile(mode, *inputString):
+    txtList = []
+    if (mode == 'r'):
+        try:
+            f = open(sys.argv[1], mode, encoding='utf_8')
+            temp = f.readlines()
+            for i in temp:
+                if (re.match(r'[a-z]+,[\u4e00-\u9fa5]+', i)):
+                    txtList.append(i)
+            f.close()
+        except:
+            print("_____________________________文件不存在!_____________________________")
+        return txtList
+    elif (mode == 'a'):
+        try:
+            f = open(sys.argv[1], mode, encoding='utf_8')
+            f.write('\n'+inputString[0])
+            f.close()
+        except:
+            print("_____________________________添加失败!_____________________________")
+    else:
+        print('目前不支持该读写模式！')
+
+
+def listToMap(txtList):
+    return zip(map(lambda s: s.split(',')[0], txtList), map(
+        lambda s: s.split(',')[1], txtList))
+
+
 @cem.route('/')
 def home():
-    word = []
-    interpretation = []
-    wDic = {}
-    with open(sys.argv[1], 'r', encoding='utf_8') as f:
-        txtList = f.readlines()
-        word = map(lambda s: s.split(',')[0], txtList)
-        interpretation = map(lambda s: s.split(',')[1], txtList)
-        wDic = zip(word, interpretation)
-        f.close()
-
-    print("___________________________________________________")
+    wDic = listToMap(readOrWriteFile(mode='r'))
     return render_template('cem.html', wDic=wDic)
 
 
 @cem.route('/', methods=['POST'])
 def add():
-    word = []
-    interpretation = []
-    wDic = {}
     if (re.match(r'[a-z]+,[\u4e00-\u9fa5]+', request.form.get('add'))):
-        with open(sys.argv[1], 'a', encoding='utf_8') as f:
-            f.write('\n'+request.form.get('add'))
-            f.close()
-    with open(sys.argv[1], 'r', encoding='utf_8') as f1:
-        txtList = f1.readlines()
-        word = map(lambda s: s.split(',')[0], txtList)
-        interpretation = map(lambda s: s.split(',')[1], txtList)
-        wDic = zip(word, interpretation)
-        f1.close()
-
-    print("___________________________________________________")
+        readOrWriteFile('a', request.form.get('add'))
+    wDic = listToMap(readOrWriteFile(mode='r'))
     return render_template('cem.html', wDic=wDic)
 
 
